@@ -33,15 +33,24 @@ function tryParseJson(message) {
 
 
 class App extends Component {
-  async componentWillMount(){
+  constructor(props){
+    super(props)
+    this.state = {
+      message: 'Init',
+      acceleration: 0
+    } 
+  }
+  async componentDidMount(){
+    const self = this
     const client = new ThingsClient((message) => {
       let json = tryParseJson(message);
       if (json && topic) {
-          if (json.topic !== topic) {
-              return;
-          }
+        if(json.path && json.path == '/features/Accelerometer_0'){
+          this.setState({
+            acceleration: json.value.properties.status.yValue
+          })
+        }
       }
-      console.log(json)
     })
     
     await client.connect(username, password, apitoken);
@@ -49,6 +58,7 @@ class App extends Component {
     
   }
   render() {
+    console.log(this.props.message, "message")
     return (
       <div className="App">
               <header className="App-header">
@@ -62,7 +72,8 @@ class App extends Component {
       <Grid>
 
         <Grid.Row>
-
+        <p>{this.state.message}</p>
+        <p>Acceleration: {this.state.acceleration}</p>
         </Grid.Row>
 
         <Grid.Row>

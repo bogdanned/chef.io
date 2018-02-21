@@ -42,7 +42,7 @@ export class ThingsClient {
         });
         this.socket.addEventListener('message', (event) => {
             const data = event.data;
-            ThingsClient.log(`Received: ${data}`);
+            //ThingsClient.log(`Received: ${data}`);
             this.onMessage(data);
         })
     }
